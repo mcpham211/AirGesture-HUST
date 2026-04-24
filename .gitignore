@@ -1,0 +1,6 @@
+venv_mario/
+venv_test/
+venv_chuan/
+__pycache__/
+*.pyc
+.DS_Store
