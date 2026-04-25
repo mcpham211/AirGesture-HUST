@@ -11,6 +11,8 @@ import tensorflow as tf
 from time import sleep
 from src.config import HAND_GESTURES
 
+GraphDef = tf.compat.v1.GraphDef
+Session = tf.compat.v1.Session
 
 def is_in_triangle(point, triangle):
     # barycentric coordinate system
@@ -24,17 +26,18 @@ def is_in_triangle(point, triangle):
     else:
         return False
 
+def load_graph(model_path):
+    # Ghi thẳng thế này để không bao giờ lỗi attribute nữa
+    graph_def = GraphDef()    
+    
+    with tf.io.gfile.GFile(model_path, "rb") as f:
+        graph_def.ParseFromString(f.read())
 
-def load_graph(path):
-    detection_graph = tf.Graph()
-    with detection_graph.as_default():
-        graph_def = tf.GraphDef()
-        with tf.gfile.GFile(path, 'rb') as fid:
-            graph_def.ParseFromString(fid.read())
-            tf.import_graph_def(graph_def, name='')
-        sess = tf.Session(graph=detection_graph)
-    return detection_graph, sess
-
+    with tf.compat.v1.Graph().as_default() as graph:
+        tf.compat.v1.import_graph_def(graph_def, name="")
+        
+    sess = Session(graph=graph)
+    return graph, sess
 
 def detect_hands(image, graph, sess):
     input_image = graph.get_tensor_by_name('image_tensor:0')

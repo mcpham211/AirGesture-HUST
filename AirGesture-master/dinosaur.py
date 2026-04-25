@@ -1,20 +1,21 @@
 """
 @author: Viet Nguyen <nhviet1009@gmail.com>
 """
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 import cv2
 import multiprocessing as _mp
 from src.utils import load_graph, dinosaur, detect_hands, predict
 from src.config import RED, GREEN, YELLOW
 
-tf.flags.DEFINE_integer("width", 640, "Screen width")
-tf.flags.DEFINE_integer("height", 480, "Screen height")
-tf.flags.DEFINE_float("threshold", 0.6, "Threshold for score")
-tf.flags.DEFINE_float("alpha", 0.3, "Transparent level")
-tf.flags.DEFINE_string("pre_trained_model_path", "src/pretrained_model.pb", "Path to pre-trained model")
+# ... (các dòng import khác)
+tf.compat.v1.flags.DEFINE_integer("width", 640, "Screen width")
+tf.compat.v1.flags.DEFINE_integer("height", 480, "Screen height")
+tf.compat.v1.flags.DEFINE_float("threshold", 0.6, "Threshold for score")
+tf.compat.v1.flags.DEFINE_float("alpha", 0.3, "Transparent level")
+tf.compat.v1.flags.DEFINE_string("pre_trained_model_path", "src/pretrained_model.pb", "Path to pre-trained model")
 
-FLAGS = tf.flags.FLAGS
-
+FLAGS = tf.compat.v1.flags.FLAGS
 
 def main():
     graph, sess = load_graph(FLAGS.pre_trained_model_path)
